@@ -39,6 +39,7 @@ import java.net.UnknownHostException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.elixirian.kommonlee.util.CommonConstants;
+import org.elixirian.kommonlee.web.CommonWebConstants;
 
 /**
  * <pre>
@@ -48,7 +49,7 @@ import org.elixirian.kommonlee.util.CommonConstants;
  *  /        \ /  /_/ _/  _  _  /  _  _  //  /_/ _/   __   //    /___/  _____/  _____/
  * /____/\____\/_____//__//_//_/__//_//_/ /_____//___/ /__//________/\_____/ \_____/
  * </pre>
- *
+ * 
  * <pre>
  *     ___  _____                                _____
  *    /   \/    /_________  ___ ____ __ ______  /    /   ______  ______
@@ -56,7 +57,7 @@ import org.elixirian.kommonlee.util.CommonConstants;
  *  /        \ /  _____/\    //   //   __   / /    /___/  _____/  _____/
  * /____/\____\\_____/   \__//___//___/ /__/ /________/\_____/ \_____/
  * </pre>
- *
+ * 
  * @author Lee, SeongHyun (Kevin)
  * @version 0.0.1 (2013-02-07)
  */
@@ -84,6 +85,10 @@ public class ServletUtilForNginx
     {
       return host;
     }
+    /*
+     * request.getRemoteHost() would return a remote IP address instead of the hostname so get the hostname using
+     * InetAddress.
+     */
     final String remoteAddr = getRemoteAddr(request);
     try
     {
@@ -106,5 +111,10 @@ public class ServletUtilForNginx
   {
     final String protocol = request.getHeader(HEADER_NAME_X_FORWARDED_PROTOCOL);
     return null == protocol ? request.getProtocol() : protocol;
+  }
+
+  public static boolean isSecure(final HttpServletRequest request)
+  {
+    return request.isSecure() || CommonWebConstants.HTTPS.equals(ServletUtilForNginx.getProtocol(request));
   }
 }
